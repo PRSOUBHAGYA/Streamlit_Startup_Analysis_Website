@@ -50,8 +50,8 @@ def display_overall_analysis(df):
         temp_df = df.groupby(['Year', 'Month'])['Amount'].sum().reset_index()
     else:
         temp_df = df.groupby(['Year', 'Month'])['Amount'].count().reset_index()
-    temp_df['X-Axis'] = temp_df['Year'].astype(str) + "-" + temp_df['Month'].astype('str')
-    st.line_chart(temp_df, x='X-Axis', y='Amount')
+    temp_df['Timeline'] = temp_df['Year'].astype(str) + "-" + temp_df['Month'].astype('str')
+    st.line_chart(temp_df, x='Timeline', y='Amount')
     col1, col2 = st.columns(2)
     with col1:
         sector_with_highamount = df.groupby('Vertical')['Amount'].sum().sort_values(ascending=False).head()

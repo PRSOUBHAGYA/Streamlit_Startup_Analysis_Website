@@ -15,6 +15,7 @@ st.sidebar.title("Apply Filters to Analyse")
 options = st.sidebar.selectbox("Select any criteria ", ['Overall', 'Startups', 'Investors'])
 
 
+
 if options == 'Startups':
     st.markdown("<h1 style='text-align: center; color: red;'>Startup wise Analysis</h1>",
                 unsafe_allow_html=True)
