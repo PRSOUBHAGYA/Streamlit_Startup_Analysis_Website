@@ -9,17 +9,19 @@ df = pd.read_csv("Cleaned_startup.csv")
 df['Date'] = pd.to_datetime(df['Date'])
 df['Year'] = df['Date'].dt.year
 df['Month'] = df['Date'].dt.month
-print(df.info())
+
 
 st.sidebar.title("Apply Filters to Analyse")
 options = st.sidebar.selectbox("Select any criteria ", ['Overall', 'Startups', 'Investors'])
 
 
 if options == 'Startups':
-    st.markdown("<h1 style='text-align: center; color: red;'>Coming Soon..</h1>",
+    st.markdown("<h1 style='text-align: center; color: red;'>Startup wise Analysis</h1>",
                 unsafe_allow_html=True)
-    st.sidebar.selectbox("Select Startup", df['Startup'].unique().tolist())
-    st.sidebar.button("Click here to Startup Analysis")
+    startup_name = st.sidebar.selectbox("Select Startup", df['Startup'].unique().tolist())
+    startup_button = st.sidebar.button("Click here to Startup Analysis")
+    if startup_button:
+        Filter_Methods.display_startup_info(df,startup_name)
 
 
 elif options == 'Investors':

@@ -2,6 +2,36 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
+def display_startup_info(df,name):
+    col1, col2,col4 = st.columns(3)
+    with col1:
+        st.metric("Startup Name", name)
+    with col2:
+        st.metric("Location",df[df['Startup'] == name]['City'].values[0])
+    with col4:
+        st.metric("Industry", df[df['Startup'] == name]['Vertical'].values[0])
+
+    st.title("")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        amount_date_df = df[df['Startup'] == name][['Amount', 'Date']]
+        amount_date_df['Date'] = amount_date_df['Date'].astype(str)
+        amount_date_df.set_index('Date', inplace=True)
+        st.subheader('Amounts invested Date Wise')
+        st.bar_chart(amount_date_df)
+    with col2:
+        temp_df = df[df['Startup'] == name][['Investment Type', 'Amount']]
+        Amount_by_round_series = temp_df.groupby('Investment Type')['Amount'].sum()
+        st.subheader('Amounts invested in each Round')
+        st.bar_chart(Amount_by_round_series)
+    with col3:
+        amount_investor_df = df[df['Startup'] == name][['Amount', 'Investors']]
+        amount_investor_df.set_index('Investors', inplace=True)
+        st.subheader('Amounts invested by Investors')
+        st.bar_chart(amount_investor_df)
+
+
 def display_overall_analysis(df):
     col1,col2,col3,col4 = st.columns(4)
     with col1:
@@ -14,7 +44,11 @@ def display_overall_analysis(df):
         st.metric("Total Startups",df['Startup'].nunique())
     st.title("")
     st.subheader("Month By Month Investments")
-    temp_df = df.groupby(['Year', 'Month'])['Amount'].sum().reset_index()
+    select_chart = st.selectbox("Select Type",['Total','Count'])
+    if select_chart=='Total':
+        temp_df = df.groupby(['Year', 'Month'])['Amount'].sum().reset_index()
+    else:
+        temp_df = df.groupby(['Year', 'Month'])['Amount'].count().reset_index()
     temp_df['X-Axis'] = temp_df['Year'].astype(str) + "-" + temp_df['Month'].astype('str')
     st.line_chart(temp_df, x='X-Axis', y='Amount')
     col1, col2 = st.columns(2)
@@ -35,15 +69,17 @@ def display_overall_analysis(df):
     with col1:
         yearwise_amount_investments = df.groupby('Year')['Amount'].sum()
         st.subheader("Investment amounts per Year")
-        fig2, ax2 = plt.subplots()
-        ax2.bar(yearwise_amount_investments.index, yearwise_amount_investments.values)
-        st.pyplot(fig2)
+        # fig2, ax2 = plt.subplots()
+        # ax2.bar(yearwise_amount_investments.index, yearwise_amount_investments.values)
+        # st.pyplot(fig2)
+        st.bar_chart(yearwise_amount_investments)
     with col2:
         yearwise_nvestments_in_startup = df.groupby('Year')['Startup'].count()
         st.subheader("Total startups investment per Year")
-        fig3, ax3 = plt.subplots()
-        ax3.bar(yearwise_nvestments_in_startup.index, yearwise_nvestments_in_startup.values)
-        st.pyplot(fig3)
+        # fig3, ax3 = plt.subplots()
+        # ax3.bar(yearwise_nvestments_in_startup.index, yearwise_nvestments_in_startup.values)
+        # st.pyplot(fig3)
+        st.bar_chart(yearwise_nvestments_in_startup)
     st.title("")
     col1, col2 = st.columns(2)
     with col1:
@@ -81,9 +117,10 @@ def display_investor_info(df,name):
     with col2:
         biggest_investments = df[df['Investors'].str.contains(name)].groupby('Startup')['Amount'].sum().sort_values(ascending=False).head()
         st.subheader("Biggest Investments")
-        fig1, ax1 = plt.subplots()
-        ax1.bar(biggest_investments.index, biggest_investments.values)
-        st.pyplot(fig1)
+        # fig1, ax1 = plt.subplots()
+        # ax1.bar(biggest_investments.index, biggest_investments.values)
+        # st.pyplot(fig1)
+        st.bar_chart(biggest_investments)
 
     col1, col2 = st.columns(2)
     with col1:
@@ -100,10 +137,9 @@ def display_investor_info(df,name):
         st.pyplot(fig3)
 
     year_series = df[df['Investors'].str.contains(name)].groupby('Year')['Amount'].sum()
-
-    st.subheader('YoY Investment')
+    st.subheader('Year of Year Investment')
     fig4, ax4 = plt.subplots()
     ax4.plot(year_series.index, year_series.values)
-
-    st.pyplot(fig4)
+    st.line_chart(year_series)
+    # st.pyplot(fig4)
 
