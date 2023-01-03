@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 
 def display_startup_info(df,name):
+    st.title("")
     col1, col2,col4 = st.columns(3)
     with col1:
         st.metric("Startup Name", name)
