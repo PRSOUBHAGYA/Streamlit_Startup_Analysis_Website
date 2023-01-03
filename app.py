@@ -14,15 +14,13 @@ df['Month'] = df['Date'].dt.month
 st.sidebar.title("Apply Filters to Analyse")
 options = st.sidebar.selectbox("Select any criteria ", ['Overall', 'Startups', 'Investors'])
 
-
-
 if options == 'Startups':
     st.markdown("<h1 style='text-align: center; color: red;'>Startup wise Analysis</h1>",
                 unsafe_allow_html=True)
     startup_name = st.sidebar.selectbox("Select Startup", df['Startup'].unique().tolist())
     startup_button = st.sidebar.button("Click here to Startup Analysis")
     if startup_button:
-        Filter_Methods.display_startup_info(df,startup_name)
+        Filter_Methods.display_startup_info(df, startup_name)
 
 
 elif options == 'Investors':

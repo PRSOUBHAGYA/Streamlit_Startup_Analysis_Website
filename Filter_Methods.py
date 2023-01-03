@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 
 def display_startup_info(df,name):
     st.title("")
-    col1, col2,col4 = st.columns(3)
+    col1, col2, col4 = st.columns(3)
     with col1:
         st.metric("Startup Name", name)
     with col2:
-        st.metric("Location",df[df['Startup'] == name]['City'].values[0])
+        st.metric("Location", df[df['Startup'] == name]['City'].values[0])
     with col4:
         st.metric("Industry", df[df['Startup'] == name]['Vertical'].values[0])
 
