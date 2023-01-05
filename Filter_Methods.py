@@ -89,7 +89,7 @@ def display_overall_analysis(df):
         st.dataframe(df.groupby('Investors')['Amount'].sum().sort_values(ascending=False).head((10)))
     with col2:
         st.write("")
-        st.subheader("Top 10 Investors in startups")
+        st.subheader("Top 10 startups invested")
         st.dataframe(df.groupby('Startup')['Amount'].sum().sort_values(ascending=False).head((10)))
     st.title("")
     col1, col2 = st.columns(2)
